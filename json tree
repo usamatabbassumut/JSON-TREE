@@ -1,0 +1,127 @@
+//========== table ==========//
+
+ <table hidden>
+            <tr class="data-row">
+                <td class="Id">1</td>
+                <td class="Name">Awais</td>
+            </tr>
+            <tr class="data-row">
+                <td class="Id">2</td>
+                <td class="Name">Ali</td>
+            </tr>
+            <tr class="data-row">
+                <td class="Id">3</td>
+                <td class="Name">Zain</td>
+            </tr>
+        </table>
+
+//========== function ==========//
+
+  function getAllData2() {
+        //first json starts
+        var jsonArray = new Array();
+        $('.data-row').each(function () {
+            var Id1 = $(this).find('.Id').text();
+            var Name1 = $(this).find('.Name').text();
+
+            //second json start
+            var jsonArray2 = new Array();
+            $('.data-row').each(function () {
+                var Id2 = $(this).find('.Id').text();
+                var Name2 = $(this).find('.Name').text();
+
+                //third json starts
+                var jsonArray3 = new Array();
+                $('.data-row').each(function () {
+                    var Id3 = $(this).find('.Id').text();
+                    var Name3 = $(this).find('.Name').text();
+
+                    //start of forth json
+                    var jsonArray4 = new Array();
+                    $('.data-row').each(function () {
+                        var Id4 = $(this).find('.Id').text();
+                        var Name4 = $(this).find('.Name').text();
+
+                        //start of fifth array
+                        var jsonArray5 = new Array();
+                        $('.data-row').each(function () {
+                            var Id5 = $(this).find('.Id').text();
+                            var Name5 = $(this).find('.Name').text();
+                            var fifthJson = {
+                                Id: Id5,
+                                Name: Name5
+
+                            }
+                            jsonArray5.push(fifthJson);
+
+                        });
+                            //end of fifth json
+                        var ForthJson = {
+                            Id: Id4,
+                            Name: Name4,
+                            child: jsonArray5
+                        }
+                        jsonArray4.push(ForthJson);
+
+                    });
+                    //end of 4th json
+
+                    var thirdJson = {
+                        Id: Id3,
+                        Name: Name3,
+                        child: jsonArray4
+                    }
+                    jsonArray3.push(thirdJson);
+                });
+                //end of third json
+                var Secondjson = {
+                    Id: Id2,
+                    Name: Name2,
+                    child: jsonArray3
+                }
+                jsonArray2.push(Secondjson);
+
+            });
+            //end of 2nd json
+
+            var FirstJson = {
+                Id: Id1,
+                Name: Name1,
+                child: jsonArray2
+            }
+            jsonArray.push(FirstJson);
+         });
+        //end of first json
+        return jsonArray;
+
+
+    }
+    //end of function
+
+//======== ajax ==========//
+ var abc = JSON.stringify(getAllData2());
+        $.ajax({
+
+            type: "POST",
+            url: "/UserRole/InsertUpdateModuleDummy/",
+            data: { 'abc': abc },
+            dataType: 'json',
+            success: function (data) {
+               
+                console.log(data);
+                //location.reload();
+            }
+        })
+
+    })
+
+//======== controller ========//
+ public ActionResult InsertUpdateModuleDummy(string abc)
+        {
+
+            List<clsDummy> user = JsonConvert.DeserializeObject<List<clsDummy>>(abc);
+
+            //return View(user);
+            return Json(new { Data = user }, JsonRequestBehavior.AllowGet);
+
+        }
